@@ -69,6 +69,35 @@ class InscripcionFacade {
             return { success: false, mensaje: error.message };
         }
     }
+
+    /**
+     * Orquesta el proceso de eliminar un ramo de la carga académica.
+     */
+    async retirar(inscripcionId, estudianteId) {
+        try {
+            const inscripcion = await InscripcionRepository.findById(inscripcionId);
+            
+            if (!inscripcion) throw new Error("La inscripción no existe.");
+            if (inscripcion.estudiante_id !== estudianteId) throw new Error("No tienes permiso para retirar esta inscripción.");
+            if (inscripcion.estado === 'Retirado') throw new Error("Esta inscripción ya fue retirada.");
+
+            // 1. Cambiar estado a retirado
+            await InscripcionRepository.retirarInscripcion(inscripcionId);
+
+            // 2. Liberar el cupo
+            if (inscripcion.estado === 'Inscrito') {
+                await SeccionRepository.incrementarCupo(inscripcion.seccion_id);
+            }
+
+            // 3. Registrar en bitácora
+            await InscripcionRepository.registrarBitacora(estudianteId, 'Retiro de Asignatura', `Sección ID ${inscripcion.seccion_id}`);
+
+            return { success: true, mensaje: "Asignatura retirada con éxito." };
+
+        } catch (error) {
+            return { success: false, mensaje: error.message };
+        }
+    }
 }
 
 // Exportamos una única instancia (ligero singleton a nivel de módulo en Node)

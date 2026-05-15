@@ -18,6 +18,16 @@ class SeccionRepository {
         return result.rows;
     }
 
+    async getAllSecciones() {
+        const query = `
+            SELECT s.*, a.codigo as asig_codigo, a.nombre as asig_nombre 
+            FROM secciones s
+            JOIN asignaturas a ON s.asignatura_id = a.id
+        `;
+        const result = await db.query(query);
+        return result.rows;
+    }
+
     async getPrerrequisitos(asignaturaId) {
         const query = `
             SELECT p.prerrequisito_id, a.codigo 
@@ -38,6 +48,28 @@ class SeccionRepository {
             RETURNING *;
         `;
         const result = await db.query(query, [seccionId]);
+        return result.rows[0];
+    }
+
+    async incrementarCupo(seccionId) {
+        const query = `
+            UPDATE secciones 
+            SET cupos_disponibles = cupos_disponibles + 1 
+            WHERE id = $1
+            RETURNING *;
+        `;
+        const result = await db.query(query, [seccionId]);
+        return result.rows[0];
+    }
+
+    async crearSeccion(asignaturaId, codigoSeccion, cuposMaximos, horario, aula) {
+        const query = `
+            INSERT INTO secciones (asignatura_id, codigo_seccion, cupos_maximos, cupos_disponibles, horario, aula)
+            VALUES ($1, $2, $3, $3, $4, $5)
+            RETURNING *;
+        `;
+        // cupos_disponibles inicia igual que cupos_maximos ($3)
+        const result = await db.query(query, [asignaturaId, codigoSeccion, cuposMaximos, horario, aula]);
         return result.rows[0];
     }
 }

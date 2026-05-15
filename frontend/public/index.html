@@ -20,11 +20,11 @@
             </div>
             
             <nav class="nav-menu">
-                <a href="#" class="nav-item active">
+                <a href="#" id="nav-oferta" class="nav-item active">
                     <span class="nav-icon">📚</span>
                     Oferta Académica
                 </a>
-                <a href="#" class="nav-item">
+                <a href="#" id="nav-horario" class="nav-item">
                     <span class="nav-icon">📅</span>
                     Mi Horario
                 </a>
@@ -34,49 +34,50 @@
                 </a>
             </nav>
             
-            <div class="user-info">
-                <div class="avatar">E</div>
-                <div class="details">
-                    <span class="name">Estudiante Demo</span>
-                    <span class="role">ID: 101</span>
+            <div class="user-info" style="flex-direction: column; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                    <div class="avatar" id="user-avatar">?</div>
+                    <div class="details">
+                        <span class="name" id="user-name">Cargando...</span>
+                        <span class="role" id="user-role">---</span>
+                    </div>
                 </div>
+                <button id="logout-btn" class="btn-primary" style="background: var(--danger); width: 100%; padding: 0.5rem; font-size: 0.8rem;">Cerrar Sesión</button>
             </div>
         </aside>
 
         <!-- Contenido Principal -->
         <main class="main-content">
             <header class="top-header">
-                <h2>Proceso de Matrícula</h2>
+                <h2 id="page-title">Proceso de Matrícula</h2>
                 <div class="status-badge active">Período Abierto</div>
             </header>
 
-            <section class="dashboard-grid">
-                <!-- Tarjeta de Inscripción Rápida -->
-                <article class="glass-card form-card">
-                    <h3>Inscripción Rápida</h3>
-                    <p class="subtitle">Ingresa el código de la sección para inscribir o entrar en lista de espera.</p>
-                    
-                    <form id="enrollment-form" class="dynamic-form">
-                        <div class="input-group">
-                            <label for="seccion-id">ID de la Sección</label>
-                            <input type="number" id="seccion-id" placeholder="Ej: 1" required>
-                        </div>
-                        <button type="submit" class="btn-primary">
-                            Inscribir Asignatura
-                        </button>
-                    </form>
-                    
-                    <div id="alert-message" class="alert hidden"></div>
-                </article>
+            <!-- VISTA 1: OFERTA ACADÉMICA -->
+            <section id="view-oferta" class="dashboard-grid">
+                
+                <!-- Alertas del sistema -->
+                <div id="alert-message" class="alert hidden" style="grid-column: span 2; display: none;"></div>
 
                 <!-- Tarjeta de Oferta Destacada -->
-                <article class="glass-card offer-card">
+                <article class="glass-card offer-card" style="grid-column: span 2;">
                     <h3>Secciones Disponibles</h3>
-                    <p class="subtitle">Catálogo actual de tu malla curricular.</p>
-                    
+                    <p class="subtitle">Catálogo actual de tu malla curricular. Haz clic en el botón + para inscribir.</p>
                     <div class="course-list" id="course-list">
-                        <!-- Las secciones se cargarán dinámicamente con JS -->
                         <div class="course-skeleton">Cargando secciones...</div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- VISTA 2: MI HORARIO -->
+            <section id="view-horario" class="dashboard-grid" style="display: none;">
+                <!-- Tarjeta de Horario Actual -->
+                <article class="glass-card schedule-card" style="grid-column: span 2;">
+                    <h3>Mi Horario Actual</h3>
+                    <p class="subtitle">Tus asignaturas inscritas y su estado.</p>
+                    
+                    <div class="course-list" id="schedule-list">
+                        <div class="course-skeleton">Cargando horario...</div>
                     </div>
                 </article>
             </section>

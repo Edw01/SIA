@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import inscripcionRoutes from './routes/inscripcionRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import coordinadorRoutes from './routes/coordinadorRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 dotenv.config();
 
@@ -13,7 +16,10 @@ app.use(cors());
 app.use(express.json()); // Permite procesar JSON en el req.body
 
 // Rutas de la API
-app.use('/api', inscripcionRoutes);
+app.use('/api/auth', authRoutes); // Rutas de Autenticación
+app.use('/api', inscripcionRoutes); // Rutas base (Estudiante)
+app.use('/api/admin', adminRoutes); // Rutas de Administrador
+app.use('/api/coordinador', coordinadorRoutes); // Rutas de Coordinador
 
 // Servir archivos estáticos del Frontend
 import path from 'path';

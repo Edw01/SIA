@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Inscripción de Asignaturas (SIA) - Portal del Estudiante">
+    <title>SIA | Inscripción de Asignaturas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Fuente moderna de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Menú Lateral -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <!-- Ruta de imagen inexistente para que el usuario agregue el logo después -->
+                <img src="/img/logo-institucional.png" alt="Logo Universidad" class="logo-img" id="uni-logo">
+                <h1 class="logo-text">SIA</h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <span class="nav-icon">📚</span>
+                    Oferta Académica
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📅</span>
+                    Mi Horario
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">👤</span>
+                    Mi Perfil
+                </a>
+            </nav>
+            
+            <div class="user-info">
+                <div class="avatar">E</div>
+                <div class="details">
+                    <span class="name">Estudiante Demo</span>
+                    <span class="role">ID: 101</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-header">
+                <h2>Proceso de Matrícula</h2>
+                <div class="status-badge active">Período Abierto</div>
+            </header>
+
+            <section class="dashboard-grid">
+                <!-- Tarjeta de Inscripción Rápida -->
+                <article class="glass-card form-card">
+                    <h3>Inscripción Rápida</h3>
+                    <p class="subtitle">Ingresa el código de la sección para inscribir o entrar en lista de espera.</p>
+                    
+                    <form id="enrollment-form" class="dynamic-form">
+                        <div class="input-group">
+                            <label for="seccion-id">ID de la Sección</label>
+                            <input type="number" id="seccion-id" placeholder="Ej: 1" required>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            Inscribir Asignatura
+                        </button>
+                    </form>
+                    
+                    <div id="alert-message" class="alert hidden"></div>
+                </article>
+
+                <!-- Tarjeta de Oferta Destacada -->
+                <article class="glass-card offer-card">
+                    <h3>Secciones Disponibles</h3>
+                    <p class="subtitle">Catálogo actual de tu malla curricular.</p>
+                    
+                    <div class="course-list" id="course-list">
+                        <!-- Las secciones se cargarán dinámicamente con JS -->
+                        <div class="course-skeleton">Cargando secciones...</div>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>

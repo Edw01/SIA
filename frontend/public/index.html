@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Inscripción de Asignaturas (SIA) - Portal del Estudiante">
+    <title>SIA | Inscripción de Asignaturas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Fuente moderna de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Menú Lateral -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <!-- Ruta de imagen inexistente para que el usuario agregue el logo después -->
+                <img src="/img/logo-institucional.png" alt="Logo Universidad" class="logo-img" id="uni-logo">
+                <h1 class="logo-text">SIA</h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" id="nav-oferta" class="nav-item active">
+                    <span class="nav-icon">📚</span>
+                    Oferta Académica
+                </a>
+                <a href="#" id="nav-horario" class="nav-item">
+                    <span class="nav-icon">📅</span>
+                    Mi Horario
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">👤</span>
+                    Mi Perfil
+                </a>
+            </nav>
+            
+            <div class="user-info" style="flex-direction: column; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                    <div class="avatar" id="user-avatar">?</div>
+                    <div class="details">
+                        <span class="name" id="user-name">Cargando...</span>
+                        <span class="role" id="user-role">---</span>
+                    </div>
+                </div>
+                <button id="logout-btn" class="btn-primary" style="background: var(--danger); width: 100%; padding: 0.5rem; font-size: 0.8rem;">Cerrar Sesión</button>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-header">
+                <h2 id="page-title">Proceso de Matrícula</h2>
+                <div class="status-badge active">Período Abierto</div>
+            </header>
+
+            <!-- VISTA 1: OFERTA ACADÉMICA -->
+            <section id="view-oferta" class="dashboard-grid">
+                
+                <!-- Alertas del sistema -->
+                <div id="alert-message" class="alert hidden" style="grid-column: span 2; display: none;"></div>
+
+                <!-- Tarjeta de Oferta Destacada -->
+                <article class="glass-card offer-card" style="grid-column: span 2;">
+                    <h3>Secciones Disponibles</h3>
+                    <p class="subtitle">Catálogo actual de tu malla curricular. Haz clic en el botón + para inscribir.</p>
+                    <div class="course-list" id="course-list">
+                        <div class="course-skeleton">Cargando secciones...</div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- VISTA 2: MI HORARIO -->
+            <section id="view-horario" class="dashboard-grid" style="display: none;">
+                <!-- Tarjeta de Horario Actual -->
+                <article class="glass-card schedule-card" style="grid-column: span 2;">
+                    <h3>Mi Horario Actual</h3>
+                    <p class="subtitle">Tus asignaturas inscritas y su estado.</p>
+                    
+                    <div class="course-list" id="schedule-list">
+                        <div class="course-skeleton">Cargando horario...</div>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>

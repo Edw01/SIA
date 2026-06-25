@@ -28,9 +28,17 @@
                     <span class="nav-icon">📅</span>
                     Mi Horario
                 </a>
+                    <a href="#" id="nav-crear-seccion" class="nav-item" style="display: none;">
+                    <span class="nav-icon">🛠️</span>
+                    Crear Sección
+                </a>
                 <a href="#" class="nav-item">
                     <span class="nav-icon">👤</span>
                     Mi Perfil
+                </a>
+                    <a href="#" id="nav-crear-asignatura" class="nav-item" style="display: none;">
+                    <span class="nav-icon">➕</span>
+                    Crear Asignatura
                 </a>
             </nav>
             
@@ -79,6 +87,36 @@
                     <div class="course-list" id="schedule-list">
                         <div class="course-skeleton">Cargando horario...</div>
                     </div>
+                </article>
+            </section>
+            <section id="view-crear-seccion" class="dashboard-grid" style="display: none;">
+                <article class="glass-card" style="grid-column: span 2;">
+                    <h3>Crear Sección</h3>
+                    <p class="subtitle">Formulario para crear una nueva sección de una asignatura existente.</p>
+
+                    <form id="form-crear-seccion" style="display: grid; gap: 12px;">
+                        <input type="number" id="asignaturaId" placeholder="ID de asignatura" required>
+                        <input type="text" id="codigoSeccion" placeholder="Código de sección, ej: A" required>
+                        <input type="number" id="cuposMaximos" placeholder="Cupos máximos" required>
+                        <input type="text" id="horario" placeholder="Horario, ej: Lunes 10:00-11:30" required>
+                        <input type="text" id="aula" placeholder="Aula, ej: Lab 1">
+
+                        <button type="submit" class="btn-primary">Crear sección</button>
+                    </form>
+                </article>
+            </section>
+            <section id="view-crear-asignatura" class="dashboard-grid" style="display: none;">
+                <article class="glass-card" style="grid-column: span 2;">
+                    <h3>Crear Asignatura</h3>
+                    <p class="subtitle">Formulario para registrar un nuevo ramo/asignatura en el sistema.</p>
+
+                    <form id="form-crear-asignatura" style="display: grid; gap: 12px;">
+                        <input type="text" id="codigoAsignatura" placeholder="Código, ej: INF220" required>
+                        <input type="text" id="nombreAsignatura" placeholder="Nombre, ej: Diseño de Software" required>
+                        <input type="number" id="creditosAsignatura" placeholder="Créditos, ej: 5" required>
+
+                        <button type="submit" class="btn-primary">Crear asignatura</button>
+                    </form>
                 </article>
             </section>
         </main>

@@ -29,11 +29,11 @@ WIP
 
 ## Proyecto construido con 🛠️
 
-* [HTML5] - Estructuración semántica del contenido y maquetado de la interfaz de usuario.
-* [CSS3] - Diseño visual, estilos responsivos y animaciones para la experiencia de usuario.
-* [JavaScript] - Lógica de programación del lado del cliente y manejo de interactividad dinámica.
-* [Node.js](https://nodejs.org/en) - Entorno de ejecución de JavaScript en el servidor
-* [Express](https://expressjs.com/) - Framework minimalista y flexible para la creación de rutas, middleware y el manejo de peticiones HTTP
+* HTML5 - Estructuración semántica del contenido y maquetado de la interfaz de usuario.
+* CSS3 - Diseño visual, estilos responsivos y animaciones para la experiencia de usuario.
+* JavaScript - Lógica de programación del lado del cliente y manejo de interactividad dinámica.
+* [Node.js](https://nodejs.org/en) - Entorno de ejecución de JavaScript en el servidor.
+* [Express](https://expressjs.com/) - Framework minimalista y flexible para la creación de rutas, middleware y el manejo de peticiones HTTP.
 * [PostgreSQL](https://www.postgresql.org/) - Base de datos empleada.
 * [Postman](https://www.postman.com/) - Usado para las pruebas de sistema.
 

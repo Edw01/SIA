@@ -6,13 +6,13 @@ dotenv.config();
 
 /**
  * PATRÓN CREACIONAL: SINGLETON
- * 
+ *
  * Propósito: Garantizar que la aplicación utilice una única instancia del Pool de conexiones
- * a la base de datos PostgreSQL, evitando la creación de múltiples pools que agotarían 
+ * a la base de datos PostgreSQL, evitando la creación de múltiples pools que agotarían
  * los recursos del servidor.
- * 
- * Justificación de no sobreingeniería: En aplicaciones Node.js con bases de datos, 
- * instanciar el Pool repetidas veces en diferentes archivos causa problemas de memoria 
+ *
+ * Justificación de no sobreingeniería: En aplicaciones Node.js con bases de datos,
+ * instanciar el Pool repetidas veces en diferentes archivos causa problemas de memoria
  * y conexiones excedidas (max connections limit). Este patrón soluciona un problema real.
  */
 class DatabaseSingleton {
@@ -32,13 +32,32 @@ class DatabaseSingleton {
         return DatabaseSingleton.instance;
     }
 
-    // Método para ejecutar consultas fácilmente
     async query(text, params) {
         return this.pool.query(text, params);
+    }
+
+    async getClient() {
+        return this.pool.connect();
+    }
+
+    async transaction(callback) {
+        const client = await this.getClient();
+
+        try {
+            await client.query('BEGIN');
+            const result = await callback(client);
+            await client.query('COMMIT');
+            return result;
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
     }
 }
 
 const dbInstance = new DatabaseSingleton();
-Object.freeze(dbInstance); // Evitamos modificaciones a la instancia singleton
+Object.freeze(dbInstance);
 
 export default dbInstance;

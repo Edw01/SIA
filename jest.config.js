@@ -9,7 +9,7 @@ export default {
         '!backend/config/**'
     ],
     coverageDirectory: 'coverage',
-    coverageReporters: ['text', 'lcov', 'clover'],
+    coverageReporters: ['text', 'lcov', 'clover', 'cobertura'],
     coverageThreshold: {
         global: {
             branches: 70,

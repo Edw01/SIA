@@ -39,6 +39,6 @@ WIP
 
 ## Autores ✒️
 
-* **Pablo Urra**
+* **Pablo Vicente Urra**
 * **Jose Mardones**
 * **Eduardo Necul**

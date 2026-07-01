@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -110,33 +110,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ValidacionStrategy } from './ValidacionStrategy.js';
@@ -147,34 +147,34 @@ import InscripcionRepository from '../../repositories/InscripcionRepository.js';
  * las secciones que el estudiante ya tiene inscritas.
  */
 export class ValidarHorario extends ValidacionStrategy {
-<span class="fstat-no" title="function not covered" >    as</span>ync validar(contexto) {
-        const { estudianteId, seccion } = <span class="cstat-no" title="statement not covered" >contexto;</span>
+    async validar(contexto) {
+        const { estudianteId, seccion } = contexto;
         
         // Obtenemos las inscripciones actuales del estudiante
-        const actuales = <span class="cstat-no" title="statement not covered" >await InscripcionRepository.getInscripcionesEstudiante(estudianteId);</span>
+        const actuales = await InscripcionRepository.getInscripcionesEstudiante(estudianteId);
         
         // Simplificación: Asumimos un formato "LU 08:30" 
         // En la vida real, parsearíamos días y horas.
         // Aquí simularemos una detección de colisión de strings literal para el prototipo.
-<span class="cstat-no" title="statement not covered" >        for (const ins of actuales) {</span>
-<span class="cstat-no" title="statement not covered" >            if (this.hayChoque(ins.horario, seccion.horario)) {</span>
-<span class="cstat-no" title="statement not covered" >                throw new Error(`BR-07: Choque de horario detectado con ${ins.asig_codigo} (Sección ${ins.codigo_seccion}).`);</span>
+        for (const ins of actuales) {
+            if (this.hayChoque(ins.horario, seccion.horario)) {
+                throw new Error(`BR-07: Choque de horario detectado con ${ins.asig_codigo} (Sección ${ins.codigo_seccion}).`);
             }
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        return true;</span>
+        return true;
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    ha</span>yChoque(horarioA, horarioB) {
+    hayChoque(horarioA, horarioB) {
         // Lógica súper simplificada para el ejemplo.
         // Si tienen exactamente la misma cadena (ej. 'LU 08:30-10:00'), es choque.
-<span class="cstat-no" title="statement not covered" >        if (!horarioA || !horarioB) <span class="cstat-no" title="statement not covered" >return false;</span></span>
+        if (!horarioA || !horarioB) return false;
         
         // Un motor real de horarios separaría por comas y luego por bloques de tiempo.
-        const bloquesA = <span class="cstat-no" title="statement not covered" >horarioA.split(',').map(<span class="fstat-no" title="function not covered" >b </span>=&gt; <span class="cstat-no" title="statement not covered" >b.trim())</span>;</span>
-        const bloquesB = <span class="cstat-no" title="statement not covered" >horarioB.split(',').map(<span class="fstat-no" title="function not covered" >b </span>=&gt; <span class="cstat-no" title="statement not covered" >b.trim())</span>;</span>
+        const bloquesA = horarioA.split(',').map(b =&gt; b.trim());
+        const bloquesB = horarioB.split(',').map(b =&gt; b.trim());
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        return bloquesA.some(<span class="fstat-no" title="function not covered" >bl</span>oque =&gt; <span class="cstat-no" title="statement not covered" >bloquesB.includes(bloque))</span>;</span>
+        return bloquesA.some(bloque =&gt; bloquesB.includes(bloque));
     }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -184,7 +184,7 @@ export class ValidarHorario extends ValidacionStrategy {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-01T21:56:48.025Z
+                at 2026-07-01T23:51:29.219Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

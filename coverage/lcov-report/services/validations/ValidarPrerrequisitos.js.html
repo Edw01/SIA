@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -105,26 +105,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ValidacionStrategy } from './ValidacionStrategy.js';
@@ -136,27 +136,27 @@ import UsuarioRepository from '../../repositories/UsuarioRepository.js';
  * de la asignatura que intenta tomar.
  */
 export class ValidarPrerrequisitos extends ValidacionStrategy {
-<span class="fstat-no" title="function not covered" >    as</span>ync validar(contexto) {
-        const { estudianteId, seccion } = <span class="cstat-no" title="statement not covered" >contexto;</span>
+    async validar(contexto) {
+        const { estudianteId, seccion } = contexto;
         
         // 1. Obtener prerrequisitos de la asignatura
-        const prerrequisitos = <span class="cstat-no" title="statement not covered" >await SeccionRepository.getPrerrequisitos(seccion.asignatura_id);</span>
+        const prerrequisitos = await SeccionRepository.getPrerrequisitos(seccion.asignatura_id);
         
         // Si no tiene prerrequisitos, pasa automático
-<span class="cstat-no" title="statement not covered" >        if (prerrequisitos.length === 0) <span class="cstat-no" title="statement not covered" >return true;</span></span>
+        if (prerrequisitos.length === 0) return true;
 &nbsp;
         // 2. Obtener historial académico (ramos aprobados)
-        const historial = <span class="cstat-no" title="statement not covered" >await UsuarioRepository.getHistorialAcademico(estudianteId);</span>
-        const idsAprobados = <span class="cstat-no" title="statement not covered" >historial.map(<span class="fstat-no" title="function not covered" >h </span>=&gt; <span class="cstat-no" title="statement not covered" >h.id)</span>;</span>
+        const historial = await UsuarioRepository.getHistorialAcademico(estudianteId);
+        const idsAprobados = historial.map(h =&gt; h.id);
 &nbsp;
         // 3. Verificar que cada prerrequisito esté en el historial de aprobados
-<span class="cstat-no" title="statement not covered" >        for (const req of prerrequisitos) {</span>
-<span class="cstat-no" title="statement not covered" >            if (!idsAprobados.includes(req.prerrequisito_id)) {</span>
-<span class="cstat-no" title="statement not covered" >                throw new Error(`BR-03: Falta prerrequisito ${req.codigo} para inscribir esta asignatura.`);</span>
+        for (const req of prerrequisitos) {
+            if (!idsAprobados.includes(req.prerrequisito_id)) {
+                throw new Error(`BR-03: Falta prerrequisito ${req.codigo} para inscribir esta asignatura.`);
             }
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        return true;</span>
+        return true;
     }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -166,7 +166,7 @@ export class ValidarPrerrequisitos extends ValidacionStrategy {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-01T21:56:48.025Z
+                at 2026-07-01T23:51:29.219Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

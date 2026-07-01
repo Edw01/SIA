@@ -220,6 +220,7 @@ __marimo__/
 # Node / frontend
 node_modules/
 frontend/node_modules/
+coverage/
 
 # npm logs
 npm-debug.log*

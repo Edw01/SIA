@@ -11,8 +11,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
+// Configuración segura de CORS
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(express.json()); // Permite procesar JSON en el req.body
 
 // Rutas de la API

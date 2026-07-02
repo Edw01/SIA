@@ -1,9 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import {
-    generateAccessToken,
-    generateRefreshToken,
-    verifyToken
-} from '../../../utils/jwt.js';
+import { generateAccessToken, generateRefreshToken, verifyToken } from '../../../utils/jwt.js';
 
 describe('Manejo de Tokens (jwt.js)', () => {
     const mockUser = {
@@ -20,7 +16,7 @@ describe('Manejo de Tokens (jwt.js)', () => {
     beforeEach(() => {
         originalAccessSecret = process.env.JWT_SECRET;
         originalRefreshSecret = process.env.JWT_REFRESH_SECRET;
-        
+
         process.env.JWT_SECRET = 'secreto_de_prueba_access';
         process.env.JWT_REFRESH_SECRET = 'secreto_de_prueba_refresh';
     });
@@ -51,7 +47,7 @@ describe('Manejo de Tokens (jwt.js)', () => {
         it('debería verificar correctamente un token de acceso y extraer su payload', () => {
             const token = generateAccessToken(mockUser);
             const payload = verifyToken(token, { type: 'access' });
-            
+
             expect(payload.id).toBe(mockUser.id);
             expect(payload.rut).toBe(mockUser.rut);
             expect(payload.nombre).toBe(mockUser.nombre);
@@ -62,7 +58,7 @@ describe('Manejo de Tokens (jwt.js)', () => {
         it('debería verificar correctamente un token de refresh', () => {
             const token = generateRefreshToken(mockUser);
             const payload = verifyToken(token, { type: 'refresh' });
-            
+
             expect(payload.id).toBe(mockUser.id);
             expect(payload.rut).toBe(mockUser.rut);
             expect(payload.tokenType).toBe('refresh');
@@ -86,7 +82,7 @@ describe('Manejo de Tokens (jwt.js)', () => {
             expect(() => {
                 verifyToken('', { type: 'access' });
             }).toThrow('Token no proporcionado.');
-            
+
             expect(() => {
                 verifyToken(null, { type: 'access' });
             }).toThrow('Token no proporcionado.');
@@ -96,18 +92,18 @@ describe('Manejo de Tokens (jwt.js)', () => {
             const token = generateAccessToken(mockUser);
             // Tomamos el token válido y le reemplazamos su último caracter
             const tokenHackeado = token.slice(0, -1) + (token.endsWith('a') ? 'b' : 'a');
-            
+
             expect(() => {
                 verifyToken(tokenHackeado, { type: 'access' });
             }).toThrow('Firma de token inválida.');
         });
-        
+
         it('debería fallar si se espera un tipo de token distinto al generado', () => {
             // Hackeamos la variable de entorno para que ambos usen la misma clave (para saltarnos el error de firma)
             process.env.JWT_REFRESH_SECRET = 'secreto_de_prueba_access';
-            
+
             const token = generateAccessToken(mockUser); // Genera con tokenType='access'
-            
+
             // Tratamos de validarlo pidiendo que sea un 'refresh'
             expect(() => {
                 verifyToken(token, { type: 'refresh' });

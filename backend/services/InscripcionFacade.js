@@ -31,9 +31,14 @@ class InscripcionFacade {
             const seccion = await SeccionRepository.findById(seccionIdNumber);
             if (!seccion) throw new Error('La sección no existe.');
 
-            const existente = await InscripcionRepository.findByEstudianteYSeccion(estudianteIdNumber, seccionIdNumber);
+            const existente = await InscripcionRepository.findByEstudianteYSeccion(
+                estudianteIdNumber,
+                seccionIdNumber
+            );
             if (existente && existente.estado !== 'Retirado') {
-                throw new Error('El estudiante ya está inscrito o en lista de espera para esta sección.');
+                throw new Error(
+                    'El estudiante ya está inscrito o en lista de espera para esta sección.'
+                );
             }
 
             const contexto = { estudianteId: estudianteIdNumber, seccion };
@@ -49,17 +54,25 @@ class InscripcionFacade {
                 );
 
                 if (existenteBloqueado && existenteBloqueado.estado !== 'Retirado') {
-                    throw new Error('El estudiante ya está inscrito o en lista de espera para esta sección.');
+                    throw new Error(
+                        'El estudiante ya está inscrito o en lista de espera para esta sección.'
+                    );
                 }
 
-                const seccionBloqueada = await SeccionRepository.findByIdForUpdate(seccionIdNumber, client);
+                const seccionBloqueada = await SeccionRepository.findByIdForUpdate(
+                    seccionIdNumber,
+                    client
+                );
                 if (!seccionBloqueada) throw new Error('La sección no existe.');
 
                 let estadoInscripcion = 'Inscrito';
                 if (seccionBloqueada.cupos_disponibles <= 0) {
                     estadoInscripcion = 'Lista_Espera';
                 } else {
-                    const seccionActualizada = await SeccionRepository.decrementarCupo(seccionIdNumber, client);
+                    const seccionActualizada = await SeccionRepository.decrementarCupo(
+                        seccionIdNumber,
+                        client
+                    );
                     if (!seccionActualizada) {
                         estadoInscripcion = 'Lista_Espera';
                     }
@@ -73,12 +86,15 @@ class InscripcionFacade {
                 );
 
                 if (!inscripcion) {
-                    throw new Error('No se pudo registrar la inscripción. Verifica si ya existe una inscripción activa.');
+                    throw new Error(
+                        'No se pudo registrar la inscripción. Verifica si ya existe una inscripción activa.'
+                    );
                 }
 
-                const accion = estadoInscripcion === 'Inscrito'
-                    ? 'Inscripción Exitosa'
-                    : 'Ingreso a Lista de Espera';
+                const accion =
+                    estadoInscripcion === 'Inscrito'
+                        ? 'Inscripción Exitosa'
+                        : 'Ingreso a Lista de Espera';
                 await InscripcionRepository.registrarBitacora(
                     estudianteIdNumber,
                     accion,
@@ -92,7 +108,11 @@ class InscripcionFacade {
             return resultado;
         } catch (error) {
             try {
-                await InscripcionRepository.registrarBitacora(estudianteIdNumber, 'Fallo de Inscripción', error.message);
+                await InscripcionRepository.registrarBitacora(
+                    estudianteIdNumber,
+                    'Fallo de Inscripción',
+                    error.message
+                );
             } catch (bitacoraError) {
                 console.error('No se pudo registrar bitácora de fallo:', bitacoraError);
             }
@@ -107,7 +127,10 @@ class InscripcionFacade {
 
         try {
             const resultado = await db.transaction(async (client) => {
-                const inscripcion = await InscripcionRepository.findByIdForUpdate(inscripcionIdNumber, client);
+                const inscripcion = await InscripcionRepository.findByIdForUpdate(
+                    inscripcionIdNumber,
+                    client
+                );
 
                 if (!inscripcion) throw new Error('La inscripción no existe.');
                 if (Number(inscripcion.estudiante_id) !== estudianteIdNumber) {

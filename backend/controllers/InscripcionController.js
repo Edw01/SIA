@@ -83,7 +83,8 @@ class InscripcionController {
                 return res.status(403).json({ error: 'Solo puedes consultar tu propio horario.' });
             }
 
-            const inscripciones = await InscripcionRepository.getInscripcionesEstudiante(estudianteId);
+            const inscripciones =
+                await InscripcionRepository.getInscripcionesEstudiante(estudianteId);
             return res.status(200).json(inscripciones);
         } catch (error) {
             if (error.message.includes('positivo')) {

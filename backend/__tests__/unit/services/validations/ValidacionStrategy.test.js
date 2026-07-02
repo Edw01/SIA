@@ -4,6 +4,8 @@ import { ValidacionStrategy } from '../../../../services/validations/ValidacionS
 describe('ValidacionStrategy (Clase Base)', () => {
     it('debería lanzar un error indicando que debe ser implementado por el hijo', async () => {
         const estrategia = new ValidacionStrategy();
-        await expect(estrategia.validar({})).rejects.toThrow("El método 'validar' debe ser implementado por la estrategia concreta.");
+        await expect(estrategia.validar({})).rejects.toThrow(
+            "El método 'validar' debe ser implementado por la estrategia concreta."
+        );
     });
 });

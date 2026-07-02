@@ -9,7 +9,11 @@ class CoordinadorController {
     async crearSeccion(req, res) {
         try {
             const asignaturaId = parsePositiveInteger(req.body.asignaturaId, 'asignaturaId');
-            const codigoSeccion = validateRequiredString(req.body.codigoSeccion, 'Código de sección', 10).toUpperCase();
+            const codigoSeccion = validateRequiredString(
+                req.body.codigoSeccion,
+                'Código de sección',
+                10
+            ).toUpperCase();
             const cuposMaximos = parsePositiveInteger(req.body.cuposMaximos, 'Cupos máximos');
             const horario = validateRequiredString(req.body.horario, 'Horario', 255);
             const aula = typeof req.body.aula === 'string' ? req.body.aula.trim() : null;
@@ -22,10 +26,14 @@ class CoordinadorController {
                 aula || null
             );
 
-            return res.status(201).json({ success: true, mensaje: 'Sección creada', seccion: nuevaSeccion });
+            return res
+                .status(201)
+                .json({ success: true, mensaje: 'Sección creada', seccion: nuevaSeccion });
         } catch (error) {
             if (error.code === '23505') {
-                return res.status(409).json({ error: 'Ya existe una sección con ese código para esta asignatura.' });
+                return res
+                    .status(409)
+                    .json({ error: 'Ya existe una sección con ese código para esta asignatura.' });
             }
 
             if (error.message.includes('obligatorio') || error.message.includes('positivo')) {

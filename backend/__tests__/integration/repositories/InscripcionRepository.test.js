@@ -5,7 +5,8 @@ jest.unstable_mockModule('../../../config/db.js', () => ({
 }));
 
 const db = (await import('../../../config/db.js')).default;
-const InscripcionRepository = (await import('../../../repositories/InscripcionRepository.js')).default;
+const InscripcionRepository = (await import('../../../repositories/InscripcionRepository.js'))
+    .default;
 
 describe('InscripcionRepository', () => {
     afterEach(() => {

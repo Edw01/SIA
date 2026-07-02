@@ -3,11 +3,7 @@ export default {
     transform: {},
     testPathIgnorePatterns: ['/node_modules/'],
     collectCoverage: true,
-    collectCoverageFrom: [
-        'backend/**/*.js',
-        '!backend/server.js',
-        '!backend/config/**'
-    ],
+    collectCoverageFrom: ['backend/**/*.js', '!backend/server.js', '!backend/config/**'],
     coverageDirectory: 'coverage',
     coverageReporters: ['text', 'lcov', 'clover', 'cobertura'],
     coverageThreshold: {

@@ -40,7 +40,7 @@ describe('API E2E: AdminController', () => {
                 .post('/api/admin/asignaturas')
                 .set('x-mock-role', 'Estudiante') // Simulamos ser estudiante
                 .send({ codigo: 'TEST', nombre: 'Test', creditos: 10 });
-            
+
             expect(res.status).toBe(403);
             expect(res.body.error).toBe('No tienes permisos para realizar esta acción.');
         });
@@ -53,7 +53,7 @@ describe('API E2E: AdminController', () => {
             const res = await request(app)
                 .post('/api/admin/asignaturas')
                 .send({ codigo: 'INFO101', nombre: 'Introducción', creditos: 10 });
-            
+
             expect(res.status).toBe(201);
             expect(res.body.success).toBe(true);
             expect(res.body.asignatura.codigo).toBe('INFO');
@@ -67,7 +67,7 @@ describe('API E2E: AdminController', () => {
             const res = await request(app)
                 .post('/api/admin/asignaturas')
                 .send({ codigo: 'INFO101', nombre: 'Repetida', creditos: 10 });
-            
+
             expect(res.status).toBe(409);
             expect(res.body.error).toContain('Ya existe');
         });
@@ -76,7 +76,7 @@ describe('API E2E: AdminController', () => {
             const res = await request(app)
                 .post('/api/admin/asignaturas')
                 .send({ nombre: 'Sin codigo ni creditos' });
-            
+
             expect(res.status).toBe(400);
             expect(res.body.error).toContain('Código es obligatorio');
         });
@@ -90,7 +90,7 @@ describe('API E2E: AdminController', () => {
             const res = await request(app)
                 .post('/api/admin/prerrequisitos')
                 .send({ asignaturaId: 10, prerrequisitoId: 5 });
-            
+
             expect(res.status).toBe(201);
             expect(res.body.success).toBe(true);
         });
@@ -99,7 +99,7 @@ describe('API E2E: AdminController', () => {
             const res = await request(app)
                 .post('/api/admin/prerrequisitos')
                 .send({ asignaturaId: 10, prerrequisitoId: 10 }); // IDs Iguales
-            
+
             expect(res.status).toBe(400);
             expect(res.body.error).toContain('sí misma');
         });
@@ -110,7 +110,7 @@ describe('API E2E: AdminController', () => {
             const res = await request(app)
                 .post('/api/admin/prerrequisitos')
                 .send({ asignaturaId: 10, prerrequisitoId: 5 });
-            
+
             expect(res.status).toBe(400);
             expect(res.body.error).toContain('Dependencia cíclica');
         });
@@ -124,7 +124,7 @@ describe('API E2E: AdminController', () => {
             const res = await request(app)
                 .post('/api/admin/prerrequisitos')
                 .send({ asignaturaId: 10, prerrequisitoId: 5 });
-            
+
             expect(res.status).toBe(409);
         });
     });

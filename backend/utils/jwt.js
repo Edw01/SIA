@@ -4,13 +4,15 @@ const DEFAULT_ACCESS_EXPIRES_IN_SECONDS = 60 * 60;
 const DEFAULT_REFRESH_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 7;
 
 function getSecret(tokenType) {
-    const secret = tokenType === 'refresh'
-        ? process.env.JWT_REFRESH_SECRET
-        : process.env.JWT_SECRET;
+    const secret =
+        tokenType === 'refresh' ? process.env.JWT_REFRESH_SECRET : process.env.JWT_SECRET;
 
-    return secret || (tokenType === 'refresh'
-        ? 'sia_refresh_secret_dev_only_change_me'
-        : 'sia_access_secret_dev_only_change_me');
+    return (
+        secret ||
+        (tokenType === 'refresh'
+            ? 'sia_refresh_secret_dev_only_change_me'
+            : 'sia_access_secret_dev_only_change_me')
+    );
 }
 
 function encodeBase64Url(value) {
@@ -22,10 +24,8 @@ function encodeBase64Url(value) {
 }
 
 function decodeBase64Url(value) {
-    const normalized = value
-        .replace(/-/g, '+')
-        .replace(/_/g, '/');
-    const padding = '='.repeat((4 - normalized.length % 4) % 4);
+    const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
+    const padding = '='.repeat((4 - (normalized.length % 4)) % 4);
     return Buffer.from(normalized + padding, 'base64').toString('utf8');
 }
 
@@ -63,9 +63,10 @@ function sign(data, secret) {
 
 export function generateToken(payload, options = {}) {
     const tokenType = options.type || 'access';
-    const fallbackExpiration = tokenType === 'refresh'
-        ? DEFAULT_REFRESH_EXPIRES_IN_SECONDS
-        : DEFAULT_ACCESS_EXPIRES_IN_SECONDS;
+    const fallbackExpiration =
+        tokenType === 'refresh'
+            ? DEFAULT_REFRESH_EXPIRES_IN_SECONDS
+            : DEFAULT_ACCESS_EXPIRES_IN_SECONDS;
     const expiresIn = parseExpiresInSeconds(options.expiresIn, fallbackExpiration);
     const now = Math.floor(Date.now() / 1000);
 
@@ -108,7 +109,10 @@ export function verifyToken(token, options = {}) {
     const receivedBuffer = Buffer.from(receivedSignature);
     const expectedBuffer = Buffer.from(expectedSignature);
 
-    if (receivedBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(receivedBuffer, expectedBuffer)) {
+    if (
+        receivedBuffer.length !== expectedBuffer.length ||
+        !crypto.timingSafeEqual(receivedBuffer, expectedBuffer)
+    ) {
         throw new Error('Firma de token inválida.');
     }
 
@@ -125,24 +129,30 @@ export function verifyToken(token, options = {}) {
 }
 
 export function generateAccessToken(usuario) {
-    return generateToken({
-        id: usuario.id,
-        rut: usuario.rut,
-        nombre: usuario.nombre,
-        rol: usuario.rol
-    }, {
-        type: 'access',
-        expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '1h'
-    });
+    return generateToken(
+        {
+            id: usuario.id,
+            rut: usuario.rut,
+            nombre: usuario.nombre,
+            rol: usuario.rol
+        },
+        {
+            type: 'access',
+            expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '1h'
+        }
+    );
 }
 
 export function generateRefreshToken(usuario) {
-    return generateToken({
-        id: usuario.id,
-        rut: usuario.rut,
-        rol: usuario.rol
-    }, {
-        type: 'refresh',
-        expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d'
-    });
+    return generateToken(
+        {
+            id: usuario.id,
+            rut: usuario.rut,
+            rol: usuario.rol
+        },
+        {
+            type: 'refresh',
+            expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d'
+        }
+    );
 }

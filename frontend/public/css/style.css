@@ -1,25 +1,25 @@
 /* =========================================================
    VARIABLES GLOBALES Y TEMA VISUAL (Premium Dark Mode)
    ========================================================= */
-   :root {
+:root {
     /* Paleta de colores Premium (Deep Blues, Purples & Neon accents) */
-    --bg-main: #0B0E14;
+    --bg-main: #0b0e14;
     --bg-secondary: #121822;
     --bg-glass: rgba(255, 255, 255, 0.03);
     --border-glass: rgba(255, 255, 255, 0.08);
-    
-    --text-primary: #F3F4F6;
-    --text-secondary: #9CA3AF;
-    
-    --accent-primary: #6366F1;
-    --accent-hover: #4F46E5;
+
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+
+    --accent-primary: #6366f1;
+    --accent-hover: #4f46e5;
     --accent-glow: rgba(99, 102, 241, 0.4);
-    
-    --success: #10B981;
+
+    --success: #10b981;
     --success-bg: rgba(16, 185, 129, 0.1);
-    --danger: #EF4444;
+    --danger: #ef4444;
     --danger-bg: rgba(239, 68, 68, 0.1);
-    --warning: #F59E0B;
+    --warning: #f59e0b;
 
     --font-main: 'Outfit', sans-serif;
     --border-radius: 16px;
@@ -41,7 +41,7 @@ body {
     color: var(--text-primary);
     line-height: 1.5;
     min-height: 100vh;
-    background-image: 
+    background-image:
         radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
         radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
 }
@@ -142,8 +142,14 @@ body {
     flex-direction: column;
 }
 
-.details .name { font-weight: 600; font-size: 0.9rem; }
-.details .role { color: var(--text-secondary); font-size: 0.8rem; }
+.details .name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.details .role {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
 
 /* --- Main Content --- */
 .main-content {
@@ -273,7 +279,9 @@ body {
     animation: fadeIn 0.4s ease-out;
 }
 
-.alert.hidden { display: none; }
+.alert.hidden {
+    display: none;
+}
 
 .alert.success {
     background: var(--success-bg);
@@ -310,8 +318,13 @@ body {
     transform: scale(1.01);
 }
 
-.course-info h4 { margin-bottom: 0.25rem; }
-.course-info p { font-size: 0.85rem; color: var(--text-secondary); }
+.course-info h4 {
+    margin-bottom: 0.25rem;
+}
+.course-info p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
 
 .course-meta {
     display: flex;
@@ -327,13 +340,24 @@ body {
     font-weight: 600;
 }
 
-.badge.seats { background: rgba(255, 255, 255, 0.1); }
-.badge.waitlist { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+.badge.seats {
+    background: rgba(255, 255, 255, 0.1);
+}
+.badge.waitlist {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
 
 /* Animaciones */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Responsive básico */

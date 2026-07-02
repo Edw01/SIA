@@ -13,12 +13,16 @@ class SeccionRepository {
     }
 
     async findByIdForUpdate(seccionId, executor = db) {
-        const result = await executor.query('SELECT * FROM secciones WHERE id = $1 FOR UPDATE', [seccionId]);
+        const result = await executor.query('SELECT * FROM secciones WHERE id = $1 FOR UPDATE', [
+            seccionId
+        ]);
         return result.rows[0];
     }
 
     async getSeccionesByAsignatura(asignaturaId, executor = db) {
-        const result = await executor.query('SELECT * FROM secciones WHERE asignatura_id = $1', [asignaturaId]);
+        const result = await executor.query('SELECT * FROM secciones WHERE asignatura_id = $1', [
+            asignaturaId
+        ]);
         return result.rows;
     }
 
@@ -71,7 +75,13 @@ class SeccionRepository {
             VALUES ($1, $2, $3, $3, $4, $5)
             RETURNING *;
         `;
-        const result = await executor.query(query, [asignaturaId, codigoSeccion, cuposMaximos, horario, aula]);
+        const result = await executor.query(query, [
+            asignaturaId,
+            codigoSeccion,
+            cuposMaximos,
+            horario,
+            aula
+        ]);
         return result.rows[0];
     }
 }

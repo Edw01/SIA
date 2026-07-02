@@ -21,13 +21,19 @@ describe('Estrategia: ValidarHorario', () => {
 
     it('debería lanzar error BR-07 si hay choque de horario', async () => {
         jest.spyOn(InscripcionRepository, 'getInscripcionesEstudiante').mockResolvedValue([
-            { asig_codigo: 'INFO101', codigo_seccion: '1', horario: 'LU 08:30-10:00, MI 08:30-10:00' }
+            {
+                asig_codigo: 'INFO101',
+                codigo_seccion: '1',
+                horario: 'LU 08:30-10:00, MI 08:30-10:00'
+            }
         ]);
 
         const validador = new ValidarHorario();
         const contexto = { estudianteId: 1, seccion: { horario: 'MI 08:30-10:00' } };
 
-        await expect(validador.validar(contexto)).rejects.toThrow('BR-07: Choque de horario detectado con INFO101 (Sección 1).');
+        await expect(validador.validar(contexto)).rejects.toThrow(
+            'BR-07: Choque de horario detectado con INFO101 (Sección 1).'
+        );
     });
 
     it('debería retornar true si los horarios vienen nulos', async () => {

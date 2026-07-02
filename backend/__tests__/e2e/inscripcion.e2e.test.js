@@ -43,28 +43,25 @@ describe('API E2E: InscripcionController', () => {
         it('debería retornar 201 si la inscripción fue exitosa', async () => {
             InscripcionFacade.inscribir.mockResolvedValue({ success: true, estado: 'Inscrito' });
 
-            const res = await request(app)
-                .post('/api/inscribir')
-                .send({ seccionId: 10 });
+            const res = await request(app).post('/api/inscribir').send({ seccionId: 10 });
 
             expect(res.status).toBe(201);
             expect(res.body.estado).toBe('Inscrito');
         });
 
         it('debería retornar 409 si el estudiante ya está inscrito', async () => {
-            InscripcionFacade.inscribir.mockResolvedValue({ success: false, mensaje: 'El estudiante ya está inscrito o en lista de espera para esta sección.' });
+            InscripcionFacade.inscribir.mockResolvedValue({
+                success: false,
+                mensaje: 'El estudiante ya está inscrito o en lista de espera para esta sección.'
+            });
 
-            const res = await request(app)
-                .post('/api/inscribir')
-                .send({ seccionId: 10 });
+            const res = await request(app).post('/api/inscribir').send({ seccionId: 10 });
 
             expect(res.status).toBe(409);
         });
 
         it('debería retornar 400 si falta el seccionId o es negativo', async () => {
-            const res = await request(app)
-                .post('/api/inscribir')
-                .send({ seccionId: -5 });
+            const res = await request(app).post('/api/inscribir').send({ seccionId: -5 });
 
             expect(res.status).toBe(400);
             expect(res.body.error).toContain('seccionId debe ser un número entero positivo');
@@ -76,7 +73,7 @@ describe('API E2E: InscripcionController', () => {
             SeccionRepository.getSeccionesByAsignatura.mockResolvedValue([{ id: 1 }]);
 
             const res = await request(app).get('/api/secciones/100');
-            
+
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(1);
         });
@@ -87,7 +84,7 @@ describe('API E2E: InscripcionController', () => {
             SeccionRepository.getAllSecciones.mockResolvedValue([{ id: 1 }, { id: 2 }]);
 
             const res = await request(app).get('/api/secciones');
-            
+
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(2);
         });
@@ -95,17 +92,19 @@ describe('API E2E: InscripcionController', () => {
 
     describe('GET /api/horario/:estudianteId', () => {
         it('debería retornar 200 y el horario del alumno', async () => {
-            InscripcionRepository.getInscripcionesEstudiante.mockResolvedValue([{ id: 1, horario: 'LU' }]);
+            InscripcionRepository.getInscripcionesEstudiante.mockResolvedValue([
+                { id: 1, horario: 'LU' }
+            ]);
 
             const res = await request(app).get('/api/horario/1'); // Mismo ID que req.user.id
-            
+
             expect(res.status).toBe(200);
             expect(res.body[0].horario).toBe('LU');
         });
 
         it('debería retornar 403 si un estudiante pide el horario de OTRO estudiante', async () => {
             const res = await request(app).get('/api/horario/999'); // Pide el horario del alumno 999 pero él es el 1
-            
+
             expect(res.status).toBe(403);
             expect(res.body.error).toBe('Solo puedes consultar tu propio horario.');
         });
@@ -116,16 +115,19 @@ describe('API E2E: InscripcionController', () => {
             InscripcionFacade.retirar.mockResolvedValue({ success: true, mensaje: 'Retirado' });
 
             const res = await request(app).delete('/api/retirar/100');
-            
+
             expect(res.status).toBe(200);
             expect(res.body.success).toBe(true);
         });
 
         it('debería retornar 400 si el retiro falló', async () => {
-            InscripcionFacade.retirar.mockResolvedValue({ success: false, mensaje: 'Error retiro' });
+            InscripcionFacade.retirar.mockResolvedValue({
+                success: false,
+                mensaje: 'Error retiro'
+            });
 
             const res = await request(app).delete('/api/retirar/100');
-            
+
             expect(res.status).toBe(400);
         });
     });

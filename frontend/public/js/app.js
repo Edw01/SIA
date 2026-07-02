@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         courseList.innerHTML = '';
 
-        secciones.forEach(sec => {
+        secciones.forEach((sec) => {
             const row = document.createElement('div');
             row.className = 'course-item';
 
@@ -215,11 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? `${sec.asig_nombre} (${sec.asig_codigo})`
                 : 'Asignatura';
 
-            const estaInscrito = inscripcionesActuales.some(ins => {
+            const estaInscrito = inscripcionesActuales.some((ins) => {
                 return ins.seccion_id === sec.id && ins.estado === 'Inscrito';
             });
 
-            let btnHTML = '';
+            let btnHTML;
 
             if (currentUser.rol === 'Estudiante') {
                 if (estaInscrito) {
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.inscribirRamoRapido = async function(seccionId) {
+    window.inscribirRamoRapido = async function (seccionId) {
         try {
             const response = await authFetch('/api/inscribir', {
                 method: 'POST',
@@ -273,7 +273,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 await fetchHorario();
                 await fetchSecciones();
             } else {
-                showAlert(`Error: ${result.mensaje || result.error || 'No se pudo inscribir'}`, 'error');
+                showAlert(
+                    `Error: ${result.mensaje || result.error || 'No se pudo inscribir'}`,
+                    'error'
+                );
             }
         } catch (error) {
             showAlert('Ocurrió un error de conexión con el servidor.', 'error');
@@ -304,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         scheduleList.innerHTML = '';
 
-        inscripciones.forEach(ins => {
+        inscripciones.forEach((ins) => {
             const row = document.createElement('div');
             row.className = 'course-item';
 
@@ -326,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.retirarRamo = async function(inscripcionId) {
+    window.retirarRamo = async function (inscripcionId) {
         if (!confirm('¿Estás seguro de que deseas retirar esta asignatura?')) return;
 
         try {
@@ -341,7 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 await fetchHorario();
                 await fetchSecciones();
             } else {
-                showAlert(`Error: ${result.error || result.mensaje || 'No se pudo retirar'}`, 'error');
+                showAlert(
+                    `Error: ${result.error || result.mensaje || 'No se pudo retirar'}`,
+                    'error'
+                );
             }
         } catch (error) {
             showAlert('Ocurrió un error al intentar retirar el ramo.', 'error');
@@ -378,7 +384,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     formCrearSeccion.reset();
                     await fetchSecciones();
                 } else {
-                    showAlert(result.error || result.mensaje || 'No se pudo crear la sección', 'error');
+                    showAlert(
+                        result.error || result.mensaje || 'No se pudo crear la sección',
+                        'error'
+                    );
                 }
             } catch (error) {
                 showAlert('Error de conexión con el servidor.', 'error');

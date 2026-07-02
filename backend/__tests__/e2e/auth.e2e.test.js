@@ -30,9 +30,7 @@ describe('API E2E: AuthController', () => {
             const mockUser = { id: 1, rut: '12345678-9', nombre: 'Test', rol: 'Estudiante' };
             UsuarioRepository.findByRut.mockResolvedValue(mockUser);
 
-            const response = await request(app)
-                .post('/api/auth/login')
-                .send({ rut: '12345678-9' });
+            const response = await request(app).post('/api/auth/login').send({ rut: '12345678-9' });
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -44,18 +42,14 @@ describe('API E2E: AuthController', () => {
         it('debería retornar 404 si el usuario no existe', async () => {
             UsuarioRepository.findByRut.mockResolvedValue(null);
 
-            const response = await request(app)
-                .post('/api/auth/login')
-                .send({ rut: '99999999-9' });
+            const response = await request(app).post('/api/auth/login').send({ rut: '99999999-9' });
 
             expect(response.status).toBe(404);
             expect(response.body.error).toBe('Usuario no encontrado.');
         });
 
         it('debería retornar 400 si el RUT falta o está vacío (Validación)', async () => {
-            const response = await request(app)
-                .post('/api/auth/login')
-                .send({}); // Sin RUT
+            const response = await request(app).post('/api/auth/login').send({}); // Sin RUT
 
             expect(response.status).toBe(400);
             expect(response.body.error).toContain('RUT es obligatorio');
@@ -66,7 +60,7 @@ describe('API E2E: AuthController', () => {
         it('debería retornar 200 y nuevos tokens si el refresh token es válido', async () => {
             const mockUser = { id: 1, rut: '12345678-9', nombre: 'Test', rol: 'Estudiante' };
             const validRefreshToken = jwtUtils.generateRefreshToken(mockUser);
-            
+
             UsuarioRepository.findById.mockResolvedValue(mockUser);
 
             const response = await request(app)

@@ -12,7 +12,7 @@ describe('Estrategia: ValidarMorosidad', () => {
 
         const validador = new ValidarMorosidad();
         const resultado = await validador.validar({ estudianteId: 1 });
-        
+
         expect(resultado).toBe(true);
         expect(UsuarioRepository.checkMorosidad).toHaveBeenCalledWith(1);
     });
@@ -21,6 +21,8 @@ describe('Estrategia: ValidarMorosidad', () => {
         jest.spyOn(UsuarioRepository, 'checkMorosidad').mockResolvedValue(true);
 
         const validador = new ValidarMorosidad();
-        await expect(validador.validar({ estudianteId: 1 })).rejects.toThrow('BR-05: El estudiante mantiene una restricción financiera y no puede inscribir ramos.');
+        await expect(validador.validar({ estudianteId: 1 })).rejects.toThrow(
+            'BR-05: El estudiante mantiene una restricción financiera y no puede inscribir ramos.'
+        );
     });
 });

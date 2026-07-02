@@ -1,41 +1,41 @@
 name: CI & SonarQube
 
 on:
-  push:
-    branches: [ "main", "develop" ]
-  pull_request:
-    branches: [ "main", "develop" ]
+    push:
+        branches: ['main', 'develop']
+    pull_request:
+        branches: ['main', 'develop']
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+    build-and-test:
+        runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout del código
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+        steps:
+            - name: Checkout del código
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-    - name: Configurar Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
+            - name: Configurar Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
 
-    - name: Instalar dependencias
-      run: npm ci
+            - name: Instalar dependencias
+              run: npm ci
 
-    - name: Ejecutar Linter
-      run: npm run lint
+            - name: Ejecutar Linter
+              run: npm run lint
 
-    - name: Validar Formato (Prettier)
-      run: npm run format:check
+            - name: Validar Formato (Prettier)
+              run: npm run format:check
 
-    - name: Ejecutar Tests (con Coverage)
-      run: npm test
+            - name: Ejecutar Tests (con Coverage)
+              run: npm test
 
-    - name: Análisis SonarQube
-      uses: SonarSource/sonarqube-scan-action@master
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+            - name: Análisis SonarQube
+              uses: SonarSource/sonarqube-scan-action@master
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

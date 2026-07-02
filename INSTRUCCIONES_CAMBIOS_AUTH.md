@@ -45,9 +45,9 @@ JWT_REFRESH_EXPIRES_IN=7d
 1. Levanta el servidor.
 2. Entra al login con un RUT existente.
 3. Revisa que en localStorage aparezcan:
-   - `sia_user`
-   - `sia_access_token`
-   - `sia_refresh_token`
+    - `sia_user`
+    - `sia_access_token`
+    - `sia_refresh_token`
 4. Como estudiante, prueba inscribir y retirar.
 5. Como estudiante, intenta llamar una ruta admin desde Postman sin rol admin: debe devolver 403.
 6. Sin token, intenta llamar `/api/inscribir`: debe devolver 401.

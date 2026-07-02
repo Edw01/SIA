@@ -32,12 +32,17 @@ class InscripcionRepository {
     }
 
     async findById(inscripcionId, executor = db) {
-        const result = await executor.query('SELECT * FROM inscripciones WHERE id = $1', [inscripcionId]);
+        const result = await executor.query('SELECT * FROM inscripciones WHERE id = $1', [
+            inscripcionId
+        ]);
         return result.rows[0];
     }
 
     async findByIdForUpdate(inscripcionId, executor = db) {
-        const result = await executor.query('SELECT * FROM inscripciones WHERE id = $1 FOR UPDATE', [inscripcionId]);
+        const result = await executor.query(
+            'SELECT * FROM inscripciones WHERE id = $1 FOR UPDATE',
+            [inscripcionId]
+        );
         return result.rows[0];
     }
 

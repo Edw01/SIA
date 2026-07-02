@@ -2,16 +2,15 @@ import db from '../config/db.js';
 
 /**
  * PRINCIPIO SOLID: SRP (Single Responsibility Principle)
- * 
- * Propósito: Esta clase tiene la ÚNICA responsabilidad de interactuar con la 
+ *
+ * Propósito: Esta clase tiene la ÚNICA responsabilidad de interactuar con la
  * tabla 'usuarios' y 'historial_academico' en la base de datos.
- * 
+ *
  * Justificación: Separar las consultas SQL de la lógica de negocio (servicios)
- * hace que el código sea testeable y mantenible. Si la base de datos cambia, 
+ * hace que el código sea testeable y mantenible. Si la base de datos cambia,
  * solo modificamos este archivo.
  */
 class UsuarioRepository {
-    
     async findById(usuarioId) {
         const result = await db.query('SELECT * FROM usuarios WHERE id = $1', [usuarioId]);
         return result.rows[0];

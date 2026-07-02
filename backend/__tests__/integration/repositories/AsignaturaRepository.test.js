@@ -5,7 +5,8 @@ jest.unstable_mockModule('../../../config/db.js', () => ({
 }));
 
 const db = (await import('../../../config/db.js')).default;
-const AsignaturaRepository = (await import('../../../repositories/AsignaturaRepository.js')).default;
+const AsignaturaRepository = (await import('../../../repositories/AsignaturaRepository.js'))
+    .default;
 
 describe('AsignaturaRepository', () => {
     afterEach(() => {
@@ -19,7 +20,7 @@ describe('AsignaturaRepository', () => {
     });
 
     it('debería detectar dependencia cíclica', async () => {
-        db.query.mockResolvedValue({ rows: [{ id: 1 }] }); 
+        db.query.mockResolvedValue({ rows: [{ id: 1 }] });
         const res = await AsignaturaRepository.comprobarDependenciaCiclica(1, 2);
         expect(res).toBe(true);
     });

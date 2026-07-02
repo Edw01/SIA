@@ -12,7 +12,11 @@ class AdminController {
             const nombre = validateRequiredString(req.body.nombre, 'Nombre', 100);
             const creditos = parsePositiveInteger(req.body.creditos, 'Créditos');
 
-            const nuevaAsignatura = await AsignaturaRepository.crearAsignatura(codigo, nombre, creditos);
+            const nuevaAsignatura = await AsignaturaRepository.crearAsignatura(
+                codigo,
+                nombre,
+                creditos
+            );
             return res.status(201).json({ success: true, asignatura: nuevaAsignatura });
         } catch (error) {
             if (error.code === '23505') {
@@ -35,23 +39,39 @@ class AdminController {
     async configurarPrerrequisito(req, res) {
         try {
             const asignaturaId = parsePositiveInteger(req.body.asignaturaId, 'asignaturaId');
-            const prerrequisitoId = parsePositiveInteger(req.body.prerrequisitoId, 'prerrequisitoId');
+            const prerrequisitoId = parsePositiveInteger(
+                req.body.prerrequisitoId,
+                'prerrequisitoId'
+            );
 
             if (asignaturaId === prerrequisitoId) {
-                return res.status(400).json({ error: 'Una asignatura no puede ser prerrequisito de sí misma.' });
+                return res
+                    .status(400)
+                    .json({ error: 'Una asignatura no puede ser prerrequisito de sí misma.' });
             }
 
             // BR: Impedir dependencia cíclica directa.
-            const esCiclico = await AsignaturaRepository.comprobarDependenciaCiclica(asignaturaId, prerrequisitoId);
+            const esCiclico = await AsignaturaRepository.comprobarDependenciaCiclica(
+                asignaturaId,
+                prerrequisitoId
+            );
             if (esCiclico) {
-                return res.status(400).json({ error: 'Error: Dependencia cíclica detectada en la malla curricular.' });
+                return res
+                    .status(400)
+                    .json({
+                        error: 'Error: Dependencia cíclica detectada en la malla curricular.'
+                    });
             }
 
             await AsignaturaRepository.agregarPrerrequisito(asignaturaId, prerrequisitoId);
-            return res.status(201).json({ success: true, mensaje: 'Prerrequisito configurado exitosamente.' });
+            return res
+                .status(201)
+                .json({ success: true, mensaje: 'Prerrequisito configurado exitosamente.' });
         } catch (error) {
             if (error.code === '23505') {
-                return res.status(409).json({ error: 'El prerrequisito ya existe para esta asignatura.' });
+                return res
+                    .status(409)
+                    .json({ error: 'El prerrequisito ya existe para esta asignatura.' });
             }
 
             if (error.message.includes('positivo')) {

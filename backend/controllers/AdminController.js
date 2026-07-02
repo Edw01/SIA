@@ -56,11 +56,9 @@ class AdminController {
                 prerrequisitoId
             );
             if (esCiclico) {
-                return res
-                    .status(400)
-                    .json({
-                        error: 'Error: Dependencia cíclica detectada en la malla curricular.'
-                    });
+                return res.status(400).json({
+                    error: 'Error: Dependencia cíclica detectada en la malla curricular.'
+                });
             }
 
             await AsignaturaRepository.agregarPrerrequisito(asignaturaId, prerrequisitoId);

@@ -2,30 +2,38 @@
 
 SIA (**Sistema de Inscripcion de Asignaturas**), es un proyecto academico cuyo enfoque va dirigido a estudiantes, coordinadores, directores, entre otros, con el principal proposito de resolver y maximizar la eficiencia en los largos periodos de inscripcion de asignaturas universitarias. El objetivo es utilizar correctamente los principios SOLID, patrones de diseño y evitar errores que estropeen a largo plazo el codigo. Aprendizaje sobre todo.
 
-### Instalación 🔧
+## Instalación 🔧
+1. Clonar el repositorio.
+
+2. Tener instalado PostgreSQL y Pgadmin4.
+
+3. Crear una DB de PostgreSQL mediante Pgadmin4, cuyos datos de la DB se usaran en el archivo ".env".
+
+4. En la DB recien creada utilizar el contenido del archivo "SIA/database/schema.sql" en la opcion *Query Tool*, y finalmente usar la opcion "Play", añadiendo asi todas las tablas necesarias para la pagina web.
+
+5. Asegurarse de que la DB creada este iniciado.
+
+6. Encontrarse en el directorio main (SIA/).
+
+7. Levantar el servidor local para la pagina web en la consola (Bash) mediante:
 
 ```
-1. WIP
+make start
 ```
+8. Ahora en tu consola deberia indicar la direccion en la que se encuentra la pagina, ingresa y listo.
 
-<!-- Secuencia de pasos para lograr una instalacion correcta -->
+9. Para cerrar el servidor local solo debes interrumpir la consola, ejemplo: *CTRL + C*.
 
-```
-9. WIP..
-```
+## Ejecucion de tests ⚙️
 
+Con el siguiente comando en consola (Bash) puedes ejecutar los tests.
 
-## Ejecucion de pruebas ⚙️
-
-WIP
-
-### Analice las pruebas end-to-end 🔩
-
-WIP
+Tras ubicarse en el directorio main (SIA/), ejecute el siguiente comando
 
 ```
-1. WIP
+make test
 ```
+Esto realizara un recorrido por el proyecto indicando zonas no cubiertas (coverage) con tests mientras que ejecuta los tests existentes.
 
 ## Proyecto construido con 🛠️
 

@@ -1,4 +1,5 @@
 import AsignaturaRepository from '../repositories/AsignaturaRepository.js';
+import { parsePositiveInteger, validateRequiredString } from '../utils/validators.js';
 
 class AdminController {
     /**
@@ -7,21 +8,27 @@ class AdminController {
      */
     async crearAsignatura(req, res) {
         try {
-            const { codigo, nombre, creditos } = req.body;
+            const codigo = validateRequiredString(req.body.codigo, 'Código', 20).toUpperCase();
+            const nombre = validateRequiredString(req.body.nombre, 'Nombre', 100);
+            const creditos = parsePositiveInteger(req.body.creditos, 'Créditos');
 
-            if (!codigo || !nombre || !creditos) {
-                return res.status(400).json({ error: "Faltan parámetros para crear la asignatura." });
-            }
-
-            const nuevaAsignatura = await AsignaturaRepository.crearAsignatura(codigo, nombre, creditos);
+            const nuevaAsignatura = await AsignaturaRepository.crearAsignatura(
+                codigo,
+                nombre,
+                creditos
+            );
             return res.status(201).json({ success: true, asignatura: nuevaAsignatura });
-
         } catch (error) {
-            console.error("Error al crear asignatura:", error);
             if (error.code === '23505') {
-                return res.status(409).json({ error: "Ya existe una asignatura con ese código." });
+                return res.status(409).json({ error: 'Ya existe una asignatura con ese código.' });
             }
-            return res.status(500).json({ error: "Error interno del servidor" });
+
+            if (error.message.includes('obligatorio') || error.message.includes('positivo')) {
+                return res.status(400).json({ error: error.message });
+            }
+
+            console.error('Error al crear asignatura:', error);
+            return res.status(500).json({ error: 'Error interno del servidor' });
         }
     }
 
@@ -31,24 +38,46 @@ class AdminController {
      */
     async configurarPrerrequisito(req, res) {
         try {
-            const { asignaturaId, prerrequisitoId } = req.body;
+            const asignaturaId = parsePositiveInteger(req.body.asignaturaId, 'asignaturaId');
+            const prerrequisitoId = parsePositiveInteger(
+                req.body.prerrequisitoId,
+                'prerrequisitoId'
+            );
 
-            if (!asignaturaId || !prerrequisitoId) {
-                return res.status(400).json({ error: "Faltan IDs de asignatura y prerrequisito." });
+            if (asignaturaId === prerrequisitoId) {
+                return res
+                    .status(400)
+                    .json({ error: 'Una asignatura no puede ser prerrequisito de sí misma.' });
             }
 
-            // BR: Impedir dependencia cíclica
-            const esCiclico = await AsignaturaRepository.comprobarDependenciaCiclica(asignaturaId, prerrequisitoId);
+            // BR: Impedir dependencia cíclica directa.
+            const esCiclico = await AsignaturaRepository.comprobarDependenciaCiclica(
+                asignaturaId,
+                prerrequisitoId
+            );
             if (esCiclico) {
-                return res.status(400).json({ error: "Error: Dependencia cíclica detectada en la malla curricular." });
+                return res.status(400).json({
+                    error: 'Error: Dependencia cíclica detectada en la malla curricular.'
+                });
             }
 
             await AsignaturaRepository.agregarPrerrequisito(asignaturaId, prerrequisitoId);
-            return res.status(201).json({ success: true, mensaje: "Prerrequisito configurado exitosamente." });
-
+            return res
+                .status(201)
+                .json({ success: true, mensaje: 'Prerrequisito configurado exitosamente.' });
         } catch (error) {
-            console.error("Error al agregar prerrequisito:", error);
-            return res.status(500).json({ error: "Error interno del servidor" });
+            if (error.code === '23505') {
+                return res
+                    .status(409)
+                    .json({ error: 'El prerrequisito ya existe para esta asignatura.' });
+            }
+
+            if (error.message.includes('positivo')) {
+                return res.status(400).json({ error: error.message });
+            }
+
+            console.error('Error al agregar prerrequisito:', error);
+            return res.status(500).json({ error: 'Error interno del servidor' });
         }
     }
 }

@@ -1,12 +1,12 @@
 /**
  * PATRÓN DE DISEÑO: STRATEGY (Comportamiento)
  * PRINCIPIO SOLID: OCP (Open/Closed Principle) e ISP (Interface Segregation Principle)
- * 
- * Propósito: Define una "Interfaz" (en JavaScript simulada por una clase base que lanza error si no se implementa) 
+ *
+ * Propósito: Define una "Interfaz" (en JavaScript simulada por una clase base que lanza error si no se implementa)
  * que todas las estrategias de validación deben cumplir.
- * 
- * Justificación: Si mañana la universidad inventa una nueva regla (ej: "Prioridad por Notas"), 
- * no modificamos la fachada ni el controlador, simplemente creamos una nueva clase que extienda esta 
+ *
+ * Justificación: Si mañana la universidad inventa una nueva regla (ej: "Prioridad por Notas"),
+ * no modificamos la fachada ni el controlador, simplemente creamos una nueva clase que extienda esta
  * y la agregamos a la lista de validaciones. Evitamos tener un "if" gigante.
  */
 export class ValidacionStrategy {

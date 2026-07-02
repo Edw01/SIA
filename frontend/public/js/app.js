@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userStr = localStorage.getItem('sia_user');
-    if (!userStr) {
-        window.location.href = '/login.html';
+    const accessToken = localStorage.getItem('sia_access_token');
+
+    if (!userStr || !accessToken) {
+        clearSessionAndRedirect();
         return;
     }
 
@@ -12,9 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('user-role').textContent = `${currentUser.rol} (ID: ${currentUser.id})`;
     document.getElementById('user-avatar').textContent = currentUser.nombre.charAt(0).toUpperCase();
 
-    document.getElementById('logout-btn').addEventListener('click', () => {
-        localStorage.removeItem('sia_user');
-        window.location.href = '/login.html';
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        try {
+            await authFetch('/api/auth/logout', { method: 'POST' });
+        } finally {
+            clearSessionAndRedirect();
+        }
     });
 
     const alertMessage = document.getElementById('alert-message');
@@ -44,6 +49,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (currentUser.rol === 'Administrador' || currentUser.rol === 'Admin') {
         navCrearAsignatura.style.display = 'flex';
+    }
+
+    function clearSessionAndRedirect() {
+        localStorage.removeItem('sia_user');
+        localStorage.removeItem('sia_access_token');
+        localStorage.removeItem('sia_refresh_token');
+        window.location.href = '/login.html';
+    }
+
+    async function refreshAccessToken() {
+        const refreshToken = localStorage.getItem('sia_refresh_token');
+        if (!refreshToken) return null;
+
+        try {
+            const response = await fetch('/api/auth/refresh', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ refreshToken })
+            });
+
+            if (!response.ok) return null;
+
+            const result = await response.json();
+            localStorage.setItem('sia_user', JSON.stringify(result.usuario));
+            localStorage.setItem('sia_access_token', result.accessToken);
+            localStorage.setItem('sia_refresh_token', result.refreshToken);
+            return result.accessToken;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async function authFetch(url, options = {}) {
+        const headers = new Headers(options.headers || {});
+        const token = localStorage.getItem('sia_access_token');
+
+        if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+        }
+
+        if (options.body && !headers.has('Content-Type')) {
+            headers.set('Content-Type', 'application/json');
+        }
+
+        let response = await fetch(url, { ...options, headers });
+
+        if (response.status === 401) {
+            const newToken = await refreshAccessToken();
+            if (!newToken) {
+                clearSessionAndRedirect();
+                return response;
+            }
+
+            const retryHeaders = new Headers(options.headers || {});
+            retryHeaders.set('Authorization', `Bearer ${newToken}`);
+            if (options.body && !retryHeaders.has('Content-Type')) {
+                retryHeaders.set('Content-Type', 'application/json');
+            }
+
+            response = await fetch(url, { ...options, headers: retryHeaders });
+        }
+
+        return response;
     }
 
     function showAlert(message, type) {
@@ -111,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchSecciones() {
         try {
-            const response = await fetch('/api/secciones');
+            const response = await authFetch('/api/secciones');
             if (!response.ok) throw new Error('Fallo al obtener secciones');
 
             const secciones = await response.json();
@@ -133,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         courseList.innerHTML = '';
 
-        secciones.forEach(sec => {
+        secciones.forEach((sec) => {
             const row = document.createElement('div');
             row.className = 'course-item';
 
@@ -147,11 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? `${sec.asig_nombre} (${sec.asig_codigo})`
                 : 'Asignatura';
 
-            const estaInscrito = inscripcionesActuales.some(ins => {
+            const estaInscrito = inscripcionesActuales.some((ins) => {
                 return ins.seccion_id === sec.id && ins.estado === 'Inscrito';
             });
 
-            let btnHTML = '';
+            let btnHTML;
 
             if (currentUser.rol === 'Estudiante') {
                 if (estaInscrito) {
@@ -190,15 +258,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.inscribirRamoRapido = async function(seccionId) {
+    window.inscribirRamoRapido = async function (seccionId) {
         try {
-            const response = await fetch('/api/inscribir', {
+            const response = await authFetch('/api/inscribir', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    estudianteId: MOCK_STUDENT_ID,
-                    seccionId: parseInt(seccionId)
-                })
+                body: JSON.stringify({ seccionId: parseInt(seccionId) })
             });
 
             const result = await response.json();
@@ -209,7 +273,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 await fetchHorario();
                 await fetchSecciones();
             } else {
-                showAlert(`Error: ${result.mensaje || result.error || 'No se pudo inscribir'}`, 'error');
+                showAlert(
+                    `Error: ${result.mensaje || result.error || 'No se pudo inscribir'}`,
+                    'error'
+                );
             }
         } catch (error) {
             showAlert('Ocurrió un error de conexión con el servidor.', 'error');
@@ -218,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchHorario() {
         try {
-            const response = await fetch(`/api/horario/${MOCK_STUDENT_ID}`);
+            const response = await authFetch(`/api/horario/${MOCK_STUDENT_ID}`);
             if (!response.ok) throw new Error('Fallo al obtener horario');
 
             inscripcionesActuales = await response.json();
@@ -240,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         scheduleList.innerHTML = '';
 
-        inscripciones.forEach(ins => {
+        inscripciones.forEach((ins) => {
             const row = document.createElement('div');
             row.className = 'course-item';
 
@@ -262,14 +329,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.retirarRamo = async function(inscripcionId) {
+    window.retirarRamo = async function (inscripcionId) {
         if (!confirm('¿Estás seguro de que deseas retirar esta asignatura?')) return;
 
         try {
-            const response = await fetch(`/api/retirar/${inscripcionId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ estudianteId: MOCK_STUDENT_ID })
+            const response = await authFetch(`/api/retirar/${inscripcionId}`, {
+                method: 'DELETE'
             });
 
             const result = await response.json();
@@ -279,7 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 await fetchHorario();
                 await fetchSecciones();
             } else {
-                showAlert(`Error: ${result.error || result.mensaje || 'No se pudo retirar'}`, 'error');
+                showAlert(
+                    `Error: ${result.error || result.mensaje || 'No se pudo retirar'}`,
+                    'error'
+                );
             }
         } catch (error) {
             showAlert('Ocurrió un error al intentar retirar el ramo.', 'error');
@@ -304,9 +372,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('/api/coordinador/secciones', {
+                const response = await authFetch('/api/coordinador/secciones', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
 
@@ -317,7 +384,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     formCrearSeccion.reset();
                     await fetchSecciones();
                 } else {
-                    showAlert(result.error || result.mensaje || 'No se pudo crear la sección', 'error');
+                    showAlert(
+                        result.error || result.mensaje || 'No se pudo crear la sección',
+                        'error'
+                    );
                 }
             } catch (error) {
                 showAlert('Error de conexión con el servidor.', 'error');
@@ -341,9 +411,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('/api/admin/asignaturas', {
+                const response = await authFetch('/api/admin/asignaturas', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
 

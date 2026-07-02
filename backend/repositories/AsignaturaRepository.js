@@ -2,12 +2,11 @@ import db from '../config/db.js';
 
 /**
  * PRINCIPIO SOLID: SRP (Single Responsibility Principle)
- * 
- * Propósito: Gestionar el acceso a datos exclusivamente para la entidad Asignatura 
+ *
+ * Propósito: Gestionar el acceso a datos exclusivamente para la entidad Asignatura
  * y sus Prerrequisitos (Malla Curricular).
  */
 class AsignaturaRepository {
-    
     async crearAsignatura(codigo, nombre, creditos) {
         const query = `
             INSERT INTO asignaturas (codigo, nombre, creditos)

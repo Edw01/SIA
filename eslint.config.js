@@ -9,7 +9,14 @@ export default [
             globals: {
                 console: 'readonly',
                 process: 'readonly',
-                setTimeout: 'readonly'
+                setTimeout: 'readonly',
+                window: 'readonly',
+                document: 'readonly',
+                localStorage: 'readonly',
+                fetch: 'readonly',
+                Headers: 'readonly',
+                confirm: 'readonly',
+                Buffer: 'readonly'
             }
         },
         rules: {
